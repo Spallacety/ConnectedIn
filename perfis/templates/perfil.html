@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br>
+<div class="row">
+  <div class="col s12 m4 l4">
+    <div class="center">
+      <img class="circle" src="{{ perfil.foto.url }}" width="196" height="196">
+    </div>
+
+    <h4 class="header center main-text">{{ perfil.nome }} {% if perfil_logado.id == perfil.id %}<a href="{% url 'editar' %}" class="btn-flat waves-effect waves-light main-text btn-convite tooltipped" data-position="bottom" data-delay="50" data-tooltip="Editar perfil"><i class="material-icons">edit</i></a>{% endif %}</h4>
+
+    {% if perfil_logado.id != perfil.id %}
+      <div class="row center">
+        {% if is_friend %}
+          <a class="waves-effect waves-light btn-flat main-text tooltipped btn-convite" data-position="bottom" data-delay="50" data-tooltip="Remover amizade" href="{% url 'remover_amizade' perfil.id%}"><i class="material-icons" style="font-size:32">person_outline</i></a>
+        {% elif requesting %}
+          <a class="waves-effect waves-light btn-flat disabled tooltipped btn-convite" data-position="bottom" data-delay="50" data-tooltip="Solicitação enviada" href="{% url 'convidar' perfil.id%}"><i class="material-icons" style="font-size:32">person_add</i></a>
+        {% elif requested %}
+          <a class="waves-effect waves-light btn main-color tooltipped btn-convite" data-position="bottom" data-delay="50" data-tooltip="Aceitar a solicitação" href="{% url 'aceitar' convite.id%}"><i class="material-icons" style="font-size:32">person_add</i></a>
+          <a class="waves-effect waves-light btn-flat main-text tooltipped btn-convite" data-position="bottom" data-delay="50" data-tooltip="Recusar a solicitação" href="{% url 'recusar' convite.id%}"><i class="material-icons" style="font-size:32">person_outline</i></a>
+        {% else %}
+          <a class="waves-effect waves-light btn main-color tooltipped btn-convite" data-position="bottom" data-delay="50" data-tooltip="Adicionar aos amigos" href="{% url 'convidar' perfil.id%}"><i class="material-icons" style="font-size:32">person_add</i></a>
+        {% endif %}
+      </div>
+
+      <div class="row center">
+        {% if blocking %}
+          <a class="waves-effect waves-light btn red" href="{% url 'desbloquear' perfil.id%}">Desbloquear usuário</a>
+        {% else %}
+          <a class="waves-effect waves-light btn red" href="{% url 'bloquear' perfil.id%}">Bloquear usuário</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <p><strong>E-mail: </strong>{{ perfil.email }}</p>
+    <p><strong>Telefone: </strong>{{ perfil.telefone }}</p>
+    <p><strong>Empresa: </strong>{{ perfil.nome_empresa }}</p>
+
+    <strong>Amigos:</strong>
+    <br>
+    {% for amigo in perfil.amigos.all %}
+      <a href="{% url 'perfil' amigo.id %}" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ amigo.nome }}"><img class="circle" src="{{ amigo.foto.url }}" width="64" height="64"></a>
+    {% endfor %}
+  </div>
+
+  <div class="col s12 m8 l8">
+    {% if blocked %}
+      <div class="row center">
+        <div class="card red lighten-5">
+          <div class="card-content red-text">
+            <span class="card-title center"><i class="material-icons" style="font-size:32">block</i></span>
+            <p>Você foi bloqueado por este usuário e por isso não pode ter acesso as suas postagens.</p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if not blocked %}
+      <h5 class="header center main-text">Linha do tempo de {{ perfil.nome }}</h5>
+      <br>
+      {% if perfil.obter_postagens %}
+        {% for postagem in perfil.obter_postagens %}
+          <div class="card grey lighten-4">
+            <div class="card-content black-text">
+              {% if perfil_logado.id == perfil.id %}
+                <a href="{% url 'apagar_postagem' postagem.id %}" class="btn-flat waves-effect waves-light red-text right btn-convite tooltipped" data-position="bottom" data-delay="50" data-tooltip="Apagar postagem"><i class="material-icons">delete</i></a>
+              {% endif %}
+              <img class="circle" src="{{ postagem.perfil.foto.url }}" width="64" height="64">
+              <h6 class="profile-title">{{ postagem.perfil.nome }}</h6>
+              <a class="post-date">{{ postagem.data_edicao }}</a>
+              <br><br>
+              <p>{{ postagem.conteudo }}</p>
+              <img src="{{ post.imagem }}"/>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="row center">
+          <div class="card grey lighten-4">
+            <div class="card-content black-text">
+              <p>{{ perfil.nome }} não tem postagens.</p>
+              <img src="{{post.imagem}}"/>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<br>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base_usuario.html' %}
+
+{% block content %}
+<div class="row center">
+  <div class="col s0 m3 l3"></div>
+
+  <div class="col s12 m6 l6">
+    <form action="{% url 'editar' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h4 class="main-text">Editar perfil</h4>
+      <br>
+      <div class="row center">
+        <div class="col s12">
+          <div class="input-field">
+            <input type="text" id="id_nome" name="nome" required value="{{ perfil.nome }}">
+            <label for="id_nome">Nome</label>
+          </div>
+        </div>
+
+        <div class="col s12">
+          <div class="input-field">
+            <input type="text" class="telefone" minlength="15"  id="id_telefone" name="telefone" required value="{{ perfil.telefone }}">
+            <label for="id_telefone">Telefone</label>
+          </div>
+        </div>
+
+        <div class="col s12">
+          <div class="input-field">
+            <input type="text" id="id_nome_empresa" name="nome_empresa" required value="{{ perfil.nome_empresa }}">
+            <label for="id_nome_empresa">Empresa</label>
+          </div>
+        </div>
+
+        <div class="file-field input-field">
+          <div class="btn main-color">
+            <span>Escolher foto</span>
+            <input type="file" name="foto">
+          </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+        </div>
+
+      </div>
+
+      <div class="container">
+        <div class="row center">
+          <button type="submit" class="btn main-color btn-primary">Salvar</button>
+          <a href="{% url 'perfil' perfil.id %}" class="btn-flat main-text btn-default">Cancelar</a>
+        </div>
+      </div>
+
+    </form>
+    {% if form.errors %}
+      <a>{{ form.non_field_errors }}</a>
+    {% endif %}
+  </div>
+
+  <div class="col s0 m3 l3"></div>
+
+</div>
+
+{% endblock %}

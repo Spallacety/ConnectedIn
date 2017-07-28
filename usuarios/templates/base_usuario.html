@@ -1,0 +1,64 @@
+{% load staticfiles %}
+<html lang="pt-br">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+		<link rel="shortcut icon" type="image/png" href="{% static 'icon.png' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <title>ConnectedIn</title>
+  </head>
+
+  <body>
+
+    <nav class="blue-grey darken-1" role="navigation">
+
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="/" class="brand-logo center">ConnectedIn</a>
+
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+
+        <div class="nav-content">
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            {% block navbar %}
+            {% endblock %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    {% block dialog %}
+    {% endblock %}
+
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+    <footer class="page-footer blue-grey darken-2">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h5 class="white-text">ConnectedIn</h5>
+            <p class="grey-text text-lighten-4">Projeto da disciplina de Técnicas Especiais de Programação.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+          <strike>Copyright© 2017,</strike> Lucas R. Todos os direitos <b>não</b> reservados.
+        </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery-mask.js' %}"></script>
+    <script src="{% static 'js/materialize.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    {% block javascript %}{% endblock %}
+
+  </body>
+
+</html>

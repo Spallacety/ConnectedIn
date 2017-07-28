@@ -1,0 +1,51 @@
+{% extends 'base_usuario.html' %}
+
+{% block content %}
+<div class="row center">
+  <div class="col s0 m3 l3"></div>
+
+  <div class="col s12 m6 l6">
+    <form action="{% url 'alterar_senha' %}" method="post">
+      {% csrf_token %}
+      <h4 class="main-text">Alterar senha</h4>
+      {% if form.errors %}
+      <br>
+        <h6 class="red-text">{{ form.non_field_errors }}</h6>
+      {% endif %}
+
+        <div class="col s12">
+          <div class="input-field">
+            <input type="password" id="id_velha_senha" name="velha_senha" required>
+            <label for="id_velha_senha">Senha antiga</label>
+          </div>
+        </div>
+
+        <div class="col s12">
+          <div class="input-field">
+            <input type="password" id="id_nova_senha1" name="nova_senha1" required>
+            <label for="id_nova_senha1">Nova senha</label>
+          </div>
+        </div>
+
+        <div class="col s12">
+          <div class="input-field">
+            <input type="password" id="id_nova_senha2" name="nova_senha2" required>
+            <label for="id_nova_senha2">Nova senha (novamente)</label>
+          </div>
+        </div>
+      <br>
+
+      <div class="container">
+        <div class="row center">
+          <button type="submit" class="btn main-color btn-primary">Salvar</button>
+          <a href="{% url 'index' %}" class="btn-flat main-text btn-default">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col s0 m3 l3"></div>
+
+</div>
+
+{% endblock %}
