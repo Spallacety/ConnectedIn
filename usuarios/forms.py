@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from perfis.views import get_perfil_logado
-from django.core.files.images import get_image_dimensions
+from perfis.models import Perfil
 
 class RegistrarUsuarioForm(forms.Form):
   email = forms.EmailField(required=True)
@@ -9,6 +9,8 @@ class RegistrarUsuarioForm(forms.Form):
   nome = forms.CharField(required=True)
   telefone = forms.CharField(required=True)
   nome_empresa = forms.CharField(required=True)
+  questao = forms.ChoiceField(choices=Perfil.QUESTOES, required=True)
+  resposta = forms.CharField(required=True)
 
   def is_valid(self):
     valid = True
@@ -92,3 +94,25 @@ class AlterarSenhaForm(forms.Form):
   def __init__(self, *args, **kwargs):
     self.request = kwargs.pop('request', None)
     super(AlterarSenhaForm, self).__init__(*args, **kwargs)
+
+class RecuperarSenhaForm(forms.Form):
+  email = forms.EmailField(required=True)
+  questao = forms.ChoiceField(choices=Perfil.QUESTOES, required=True)
+  resposta = forms.CharField(required=True)
+
+  def is_valid(self):
+    valid = True
+
+    if not super(RecuperarSenhaForm, self).is_valid():
+      self.adiciona_erro('Por favor, verifique os dados informados.')
+      valid = False
+
+    return valid
+
+  def adiciona_erro(self, message):
+    errors = self._errors.setdefault(forms.forms.NON_FIELD_ERRORS, forms.utils.ErrorList())
+
+    errors.append(message)
+
+class BuscarForm(forms.Form):
+  nome = forms.CharField(required=True)

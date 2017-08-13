@@ -1,0 +1,57 @@
+{% extends 'base_usuario.html' %}
+
+{% block content %}
+<div class="row center">
+  <div class="col s0 m3 l3"></div>
+
+  <div class="col s12 m6 l6">
+    <form action="{% url 'recuperar_senha' %}" method="post">
+      {% csrf_token %}
+      <h4 class="main-text">Recuperar senha</h4>
+      <br>
+      <div class="row center">
+        <div class="col s12">
+          <div class="input-field">
+            <input type="email" id="id_email" name="email" required>
+            <label for="id_email">E-mail</label>
+          </div>
+        </div>
+
+        <div class="input-field col s12">
+          <select name="questao">
+            <option value="1">Qual o ano de nascimento do seu pai?</option>
+            <option value="2">Qual o nome do seu animal de estimação?</option>
+            <option value="3">Onde você nasceu?</option>
+            <option value="4">Como é o nome da sua mãe?</option>
+          </select>
+          <label>Pergunta de segurança</label>
+        </div>
+
+        <div class="col s12">
+          <div class="input-field">
+            <input type="text" id="id_resposta" name="resposta" required>
+            <label for="id_resposta">Resposta de segurança</label>
+          </div>
+        </div>
+
+      </div>
+
+      <br>
+      <div class="container">
+        <div class="row center">
+          <button type="submit" class="btn main-color btn-primary">Recuperar</button>
+          <a href="{% url 'login' %}" class="btn-flat main-text btn-default">Cancelar</a>
+        </div>
+      </div>
+
+    </form>
+    {% if form.errors %}
+      <a>{{ form.non_field_errors }}</a>
+    {% endif %}
+  </div>
+
+  <div class="col s0 m3 l3"></div>
+
+</div>
+
+{% endblock %}

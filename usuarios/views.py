@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.views.generic.base import View
+from django.db.models import Q
 from .forms import *
 from perfis.models import *
 from perfis.views import get_perfil_logado
@@ -17,7 +18,7 @@ class RegistrarUsuarioView(View):
     if form.is_valid():
       dados_form = form.cleaned_data
       usuario = User.objects.create_user(username=dados_form['email'], email=dados_form['email'], password=dados_form['senha'])
-      perfil = Perfil(nome=dados_form['nome'], telefone=dados_form['telefone'], nome_empresa=dados_form['nome_empresa'], usuario=usuario)
+      perfil = Perfil(nome=dados_form['nome'], telefone=dados_form['telefone'], nome_empresa=dados_form['nome_empresa'], usuario=usuario, questao=dados_form['questao'], resposta=dados_form['resposta'])
       perfil.save()
       return redirect('index')
 
@@ -41,6 +42,8 @@ class EditarUsuarioView(View):
       perfil.nome = dados_form['nome']
       perfil.telefone = dados_form['telefone']
       perfil.nome_empresa = dados_form['nome_empresa']
+      perfil.questao = dados_form['questao']
+      perfil.resposta = dados_form['resposta']
       foto = form.verificar_foto(request)
       if foto is not None:
         perfil.foto = foto
@@ -67,3 +70,39 @@ class AlterarSenhaView(View):
       return redirect('index')
 
     return render(request, 'alterar_senha.html', {'form': form})
+
+class RecuperarSenhaView(View):
+  def get(self, request):
+    return render(request, 'recuperar_senha.html')
+
+  def post(self, request):
+    form = RecuperarSenhaForm(request.POST)
+
+    if form.is_valid():
+      dados_form = form.cleaned_data
+      try:
+        user = User.objects.get(username=dados_form['email'])
+        perfil = Perfil.objects.get(usuario=user, questao=dados_form['questao'], resposta=dados_form['resposta'])
+        if perfil:
+          user.set_password('123')
+          user.save()
+        return redirect('index')
+      except:
+        return redirect('index')
+
+    return render(request, 'recuperar_senha.html', {'form': form})
+
+class BuscarView(View):
+  def get(self, request):
+    return render(request, 'buscar.html')
+
+  def post(self, request):
+    form = BuscarForm(request.POST)
+
+    if form.is_valid():
+      dados_form = form.cleaned_data
+      condicao = Q(nome__icontains=dados_form['nome'])
+      perfis = Perfil.objects.filter(condicao)
+      return render(request, 'buscar.html', {'perfis': perfis})
+
+    return render(request, 'buscar.html', {'form': form})

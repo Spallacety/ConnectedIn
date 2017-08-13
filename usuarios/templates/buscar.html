@@ -1,0 +1,50 @@
+{% extends 'base_usuario.html' %}
+
+{% block content %}
+
+<br>
+<div class="row">
+  <div class="card grey lighten-5">
+    <div class="card-content black-text">
+      <form action="{% url 'buscar' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="input-field col s9 m11 l11">
+            <input type="text" id="id_nome" name="nome" maxlength="256" required>
+            <label for="id_nome">Pesquisar usuário</label>
+          </div>
+          <div class="col s3 m1 l1">
+            <button class="btn btn-convite main-color" type="submit" value="Submit"><i class="material-icons">search</i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col s12">
+
+    {% if perfis %}
+      {% for perfil in perfis %}
+        <div class="card-panel grey lighten-4 black-text">
+          <div class="row">
+            <div class="col">
+            <a href="{% url 'perfil' perfil.id %}">
+              <img href="" class="circle" src="{{ perfil.foto.url }}" width="64" height="64">
+            </a>
+            </div>
+            <a href="{% url 'perfil' perfil.id %}">
+              <h6 class="profile-title">{{ perfil.nome }}</h6>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+  </div>
+
+</div>
+
+{% endblock %}

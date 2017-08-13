@@ -20,7 +20,7 @@ class Perfil(models.Model):
   foto = models.ImageField(upload_to='avatars/', default='avatars/default.png', null=True)
   questao = models.CharField(max_length=1, null=False, choices=QUESTOES, default=1)
   resposta = models.CharField(max_length=128, null=False)
-  desativado = models.BooleanField(default=True)
+  desativado = models.BooleanField(default=False)
 
   @property
   def email(self):

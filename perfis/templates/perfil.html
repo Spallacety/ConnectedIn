@@ -62,15 +62,21 @@
       <br>
       {% if perfil.obter_postagens %}
         {% for postagem in perfil.obter_postagens %}
-          <div class="card grey lighten-4">
-            <div class="card-content black-text">
-              {% if perfil_logado.id == perfil.id %}
-                <a href="{% url 'apagar_postagem' postagem.id %}" class="btn-flat waves-effect waves-light red-text right btn-convite tooltipped" data-position="bottom" data-delay="50" data-tooltip="Apagar postagem"><i class="material-icons">delete</i></a>
-              {% endif %}
-              <img class="circle" src="{{ postagem.perfil.foto.url }}" width="64" height="64">
-              <h6 class="profile-title">{{ postagem.perfil.nome }}</h6>
+          <div class="card-panel grey lighten-4 black-text">
+            {% if perfil_logado.id == perfil.id %}
+              <a href="{% url 'apagar_postagem' postagem.id %}" class="btn-flat waves-effect waves-light red-text right btn-convite tooltipped" data-position="bottom" data-delay="50" data-tooltip="Apagar postagem"><i class="material-icons">delete</i></a>
+            {% endif %}
+            <div class="row">
+              <div class="col">
+                <a href="{% url 'perfil' postagem.perfil.id %}">
+                  <img class="circle" src="{{ postagem.perfil.foto.url }}" width="64" height="64">
+                </a>
+              </div>
+              <a href="{% url 'perfil' postagem.perfil.id %}">
+                <h6 class="profile-title">{{ postagem.perfil.nome }}</h6>
+              </a>
               <a class="post-date">{{ postagem.data_edicao }}</a>
-              <br><br>
+              <br>
               <p>{{ postagem.conteudo }}</p>
               <img src="{{ post.imagem }}"/>
             </div>
